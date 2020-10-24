@@ -5,7 +5,17 @@ module.exports = {
   },
   purge: [],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        gray: '#f4f5f7',
+        'light-gray': '#f9fafb',
+        'white': '#ffffff',
+        'border-gray': '#cbd5e0',
+        'input-border-gray': '#e2e8f0',
+        'teal': '#38b2ac',
+        'hover-teal': '#319795'
+      }
+    },
   },
   variants: {},
   plugins: [],

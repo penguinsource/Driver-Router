@@ -12,3 +12,34 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.custom-file-input {
+  width: 143px;
+  overflow: hidden;
+  outline: 0;
+}
+
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.custom-file-input::before {
+  content: 'Select File';
+  display: inline-block;
+  border-radius: 99px;
+  padding: 15px 20px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14pt;
+  background-color: #38b2ac;
+  color: white;
+}
+.custom-file-input:hover::before {
+  border-color: black;
+}
+.custom-file-input:active::before {
+  background-color: #319795;
+  outline: 0;
+}
