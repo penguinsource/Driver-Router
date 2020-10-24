@@ -21,6 +21,7 @@ app.use((req, res, next) => {
   next();
 });
 
+const AppManager = require('./resources/AppManager')
 const SendSMS = require('./resources/SMS')
 const Geocode = require('./resources/Geocode')
 
@@ -29,7 +30,6 @@ const port = 3005
 app.use(express.static('./react/build'))
 
 const fetch = require('node-fetch')
-const csvtojson = require('csvtojson')
 
 
 
@@ -90,26 +90,17 @@ var uploadStorageConfig = multer.diskStorage({
 });
 var upload = multer({ storage: uploadStorageConfig });
 
-app.post('/api/csv', upload.single('excel'), (req, res) => {
-  console.log('whats up duck')
-  const csvReader = csvtojson.csv();
+app.post('/api/csv', upload.single('excel'), async (req, res) => {
+  console.log('whats up duck', req.body)
+  let { body: { drivers } } = req
   const file = req.file
-  return csvReader.fromFile(file.path)
-    .then(async (jsonObj)=>{
-        console.log('READ at ', new Date(), ' jsonobj is', jsonObj);
-        // const tree = convertToOrganizationTree(jsonObj);
-        // const filePath = `${req.file.destination}/${req.file.filename}`;
-        // await uploadFile(filePath, req.file.filename);
-        // res.json(tree);
-        res.status(200).send({
-          message: 'HELLOOOOOOOOOOO!!!!!'
-        })
 
-    })
-    .catch((err) => {
-      console.log('ERROR', err);
-      res.json(err);
-    });
+  const result = await AppManager.openExcel(drivers, file)
+
+  console.log('Drivers', drivers)
+  return res.status(200).json({
+    success: true
+  })
 });
 
 app.listen(port, () => {
