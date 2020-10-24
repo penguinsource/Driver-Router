@@ -3,15 +3,33 @@ dotenv.config({ path: `./config/dev.env` });
 
 const express = require('express')
 const app = express()
+app.use(express.json({ limit: '50mb', extended: true }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use((req, res, next) => {
+  const origin = req.header('origin');
+  res.header("Access-Control-Allow-Origin", origin);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "*");
+  res.header("Access-Control-Allow-Methods", "GET,PUT,PATCH,POST,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+
+  res.header("Cache-Control", "no-store");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+  next();
+});
 
 const SendSMS = require('./resources/SMS')
 const Geocode = require('./resources/Geocode')
 
-const port = 3000
+const port = 3005
 
 app.use(express.static('./react/build'))
 
 const fetch = require('node-fetch')
+const csvtojson = require('csvtojson')
 
 
 
@@ -46,7 +64,7 @@ const run = async () => {
   }
 }
 
-run()
+// run()
 
 
 // Endpoints below:
@@ -57,7 +75,7 @@ app.get('/api/sup', (req, res) => {
 })
 
 
-import multer from 'multer';
+const multer = require('multer');
 let FILE_DESTINATION = '/tmp';
 var uploadStorageConfig = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -72,16 +90,21 @@ var uploadStorageConfig = multer.diskStorage({
 });
 var upload = multer({ storage: uploadStorageConfig });
 
-app.post('/csv', upload.single('excel'), (req, res) => {
+app.post('/api/csv', upload.single('excel'), (req, res) => {
+  console.log('whats up duck')
   const csvReader = csvtojson.csv();
-  console.log('ENDPOINT', req.file);
-  return csvReader.fromFile(req.file.path)
+  const file = req.file
+  return csvReader.fromFile(file.path)
     .then(async (jsonObj)=>{
         console.log('READ at ', new Date(), ' jsonobj is', jsonObj);
-        const tree = convertToOrganizationTree(jsonObj);
-        const filePath = `${req.file.destination}/${req.file.filename}`;
-        await uploadFile(filePath, req.file.filename);
-        res.json(tree);
+        // const tree = convertToOrganizationTree(jsonObj);
+        // const filePath = `${req.file.destination}/${req.file.filename}`;
+        // await uploadFile(filePath, req.file.filename);
+        // res.json(tree);
+        res.status(200).send({
+          message: 'HELLOOOOOOOOOOO!!!!!'
+        })
+
     })
     .catch((err) => {
       console.log('ERROR', err);

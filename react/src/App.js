@@ -18,6 +18,20 @@ function App() {
         >
           Learn React HELLO!
         </a>
+        <input type="file" onChange={(e) => {
+          console.log('change???', e.target.files)
+          const data = new FormData()
+          data.append('excel', e.target.files[0])
+
+          fetch('https://api-gsb.ngrok.io/api/csv', {
+            method: 'POST',
+            body:data
+          })
+          .then(response => response.json())
+          .then(response => {
+            console.log('response is', response)
+          })
+        }} />
       </header>
     </div>
   );
