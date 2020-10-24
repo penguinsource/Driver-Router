@@ -94,10 +94,13 @@ const getRequestData = (originObj, locationList, drivers) => {
 }
 
 const SHORT_SAMPLE = require('./sampleData/short')
+const VERY_SHORT_SAMPLE = require('./sampleData/veryShort')
 
 MapRoutes.mapRoutesWithDrivers = (originObj, locationList, mapResponse) => {
+  console.log('map response is', mapResponse)
   const { route: routeList, vehicles } = mapResponse
   let driverRouteLinks = {}
+  console.log('route list is', routeList)
   routeList.forEach((routeList, driverIndex) => {
     let link = 'https://www.google.com/maps/dir/'
     const distance = vehicles[parseInt(driverIndex, 10)].miles
@@ -113,6 +116,8 @@ MapRoutes.mapRoutesWithDrivers = (originObj, locationList, mapResponse) => {
       if (parseInt(routeIndex, 10) === 0) {
         return link += originObj.lat + ',' + originObj.lon + '/'
       }
+      console.log('locationList', locationList)
+      console.log('index', parseInt(routeIndex, 10) - 1)
       const locationObject = locationList[parseInt(routeIndex, 10) - 1]
       link += locationObject.lat + ',' + locationObject.lon + '/'
 
@@ -134,6 +139,8 @@ MapRoutes.mapRoutesWithDrivers = (originObj, locationList, mapResponse) => {
       link,
       distance,
       time,
+      // humanizedTime: moment.duration({ "minutes": time }).humanize(),
+      // humanizedTime: moment.relativeTimeThreshold('m', time),
       embedMapUrl,
       stops
     }
@@ -167,12 +174,13 @@ MapRoutes.getShortestRoutes = async (originObj = sampleOrigin, locationList, dri
     // });
     // const resp = await response.json()
     // console.log('MAP ROUTE RESPONSE TO SAVE:', resp)
-    // return MapRoutes.mapRoutesWithDrivers(originObj, locationList, response);
+    // return MapRoutes.mapRoutesWithDrivers(originObj, locationList, resp);
 
 
     // USE SAMPLE DATA:
-    console.log('I AM USING A SAMPLE RESPONSE')
-    return MapRoutes.mapRoutesWithDrivers(originObj, locationList, SHORT_SAMPLE.responseData);
+    // console.log('I AM USING A SAMPLE RESPONSE')
+    // return MapRoutes.mapRoutesWithDrivers(originObj, locationList, SHORT_SAMPLE.responseData);
+    return MapRoutes.mapRoutesWithDrivers(originObj, locationList, VERY_SHORT_SAMPLE.responseData);
   } catch (err) {
     console.error('MapRoutes.getShortestRoutes API error', err)
     console.error('MapRoutes.getShortestRoutes use sample data instead!')

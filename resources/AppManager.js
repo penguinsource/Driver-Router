@@ -25,6 +25,7 @@ AppManager.openExcel = async (drivers, fileObject) => {
   }
 
   const promisesDone = await Promise.all(promiseList);  // wait for all geocode requests to finish..
+  console.log('addresses, addresses', addresses)
   const routes = await MapRoutes.getShortestRoutes(undefined, addresses, drivers)
   console.log('routes', routes)
 

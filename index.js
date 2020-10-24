@@ -101,6 +101,17 @@ app.post('/api/csv', upload.single('excel'), async (req, res) => {
   return res.status(200).json(result)
 });
 
+app.post('/api/sendRoutes', async (req, res) => {
+  console.log('send routes', req.body)
+  let { body: { data } } = req
+  const file = req.file
+
+  console.log('drivers..', drivers, 'agency name ..', agencyName)
+
+  const result = await AppManager.openExcel(drivers, file)
+  return res.status(200).json(result)
+});
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
