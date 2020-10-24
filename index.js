@@ -44,7 +44,7 @@ const run = async () => {
   }
 }
 
-run()
+// run()
 
 // run()
 
@@ -91,7 +91,9 @@ const sendSMS = async () => {
 console.log('whats up...')
 
 app.get('/api/sup', (req, res) => {
-  res.send('Hello World 2!')
+  const text = 'Hello World 2! here is sample api:' + process.env.SAMPLE_API_KEY + ', all others are:' + JSON.stringify(process.env)
+  // console.log('process env is', JSON.stringify(process.env))
+  res.status(200).send(text)
 })
 
 app.listen(port, () => {
