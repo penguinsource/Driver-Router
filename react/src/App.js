@@ -22,7 +22,7 @@ function App() {
           console.log('change???', e.target.files)
           const data = new FormData()
           data.append('excel', e.target.files[0])
-          data.append('drivers', 5)
+          data.append('drivers', 2)
 
           fetch('https://api-gsb.ngrok.io/api/csv', {
             method: 'POST',

@@ -1,5 +1,6 @@
 const csvtojson = require('csvtojson')
 const Geocode = require('./Geocode')
+const MapRoutes = require('./MapRoutes/MapRoutes')
 
 const AppManager = {}
 
@@ -9,7 +10,7 @@ AppManager.openExcel = async (drivers, fileObject) => {
   const excelJSON = await csvReader.fromFile(fileObject.path)
   // console.log('excelJSON is', excelJSON)
   const addresses = excelJSON.map((data, index) => ({
-    address: `${data.Address}`
+    name: `${data.Address}`
   }))
 
   const promiseList = []
@@ -18,7 +19,9 @@ AppManager.openExcel = async (drivers, fileObject) => {
 
     const geocodePromise = Geocode.getLatLon(addresses[i])
       .then(location => {
-        address.location = location
+        console.log('location', location)
+        address.lon = location.lng
+        address.lat = location.lat
       })
     promiseList.push(geocodePromise)
   }
@@ -26,7 +29,14 @@ AppManager.openExcel = async (drivers, fileObject) => {
   const promisesDone = await Promise.all(promiseList);  // wait for all geocode requests to finish..
 
   console.log('addresses with geolocations', addresses)
-
+  return;
+  const routes = await MapRoutes.getShortestRoutes(undefined, addresses, drivers)
+  // console.log('routes', routes)
+  // const abcd = MapRoutes.mapRoutesWithDrivers(routeList, addresses);
+  return {
+    success: true,
+    routes
+  }
 }
 
 module.exports = AppManager
