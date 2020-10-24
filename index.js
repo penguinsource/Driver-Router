@@ -1,3 +1,6 @@
+const dotenv = require('dotenv');
+dotenv.config({ path: `./config/dev.env` });
+
 const express = require('express')
 const app = express()
 
@@ -8,10 +11,8 @@ const port = 3000
 
 app.use(express.static('./react/build'))
 
-
 const fetch = require('node-fetch')
 
-const SENDINBLUE_API_KEY = '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'
 
 
 // SendSMS('+19545361700', 'Whats up jack1')
@@ -36,7 +37,8 @@ const addresses = [
 ]
 
 const run = async () => {
-  // const hello = await Geocode.getLatLon('854 Broken Sound Pkwy NW, Boca Raton, FL 33487')
+  const hello = await Geocode.getLatLon('854 Broken Sound Pkwy NW, Boca Raton, FL 33487')
+  return
   for (let i = 0; i < addresses.length; i++) {
     const address = addresses[i]
     const hello = await Geocode.getLatLon(address)
@@ -44,57 +46,48 @@ const run = async () => {
   }
 }
 
-// run()
+run()
 
-// run()
 
-// const sendSMS = async () => {
-//   const response = await fetch('https://api.sendinblue.com/v3/transactionalSMS/sms', {
-//     method: 'POST',
-//     headers: {
-//       'api-key': SENDINBLUE_API_KEY,
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify({
-//       "type": "transactional",
-//       "sender": "9545361700",
-//       "recipient": "5614453344",
-//       "content": "Testing SMS, whats up champ!"
-//     })
-//   })
-//   console.log('response is', response)
-//   const resp = await response.json()
-//   console.log('resp is', resp)
-// }
-
-const sendSMS = async () => {
-  const response = await fetch('https://api.twilio.com/2010-04-01/Accounts/AC6d2852d119a9fb33b6f057b1ba5c433b/Messages.json', {
-    method: 'POST',
-    headers: {
-      'api-key': SENDINBLUE_API_KEY,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      "type": "transactional",
-      "sender": "9545361700",
-      "recipient": "5614453344",
-      "content": "Testing SMS, whats up champ!"
-    })
-  })
-  console.log('response is', response)
-  const resp = await response.json()
-  console.log('resp is', resp)
-}
-
-// sendSMS()
-
-console.log('whats up...')
+// Endpoints below:
 
 app.get('/api/sup', (req, res) => {
   const text = 'Hello World 2! here is sample api:' + process.env.SAMPLE_API_KEY + ', all others are:' + JSON.stringify(process.env)
-  // console.log('process env is', JSON.stringify(process.env))
-  res.status(200).send(text)
+  res.status(200).send('Sample API response')
 })
+
+
+import multer from 'multer';
+let FILE_DESTINATION = '/tmp';
+var uploadStorageConfig = multer.diskStorage({
+    destination: function (req, file, cb) {
+      // console.log('environment is...', process.env.ENV);
+      // console.log('whats up destination', file);
+      cb(null, FILE_DESTINATION);
+    },
+    filename: function (req, file, cb) {
+      console.log('hii', file);
+      cb(null, `${file.originalname}`);
+    }
+});
+var upload = multer({ storage: uploadStorageConfig });
+
+app.post('/csv', upload.single('excel'), (req, res) => {
+  const csvReader = csvtojson.csv();
+  console.log('ENDPOINT', req.file);
+  return csvReader.fromFile(req.file.path)
+    .then(async (jsonObj)=>{
+        console.log('READ at ', new Date(), ' jsonobj is', jsonObj);
+        const tree = convertToOrganizationTree(jsonObj);
+        const filePath = `${req.file.destination}/${req.file.filename}`;
+        await uploadFile(filePath, req.file.filename);
+        res.json(tree);
+    })
+    .catch((err) => {
+      console.log('ERROR', err);
+      res.json(err);
+    });
+});
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)

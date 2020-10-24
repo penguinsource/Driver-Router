@@ -1,6 +1,4 @@
-const accountSid = 'AC6d2852d119a9fb33b6f057b1ba5c433b';
-const authToken = 'ba13a5ae98e022cbfc94fa52c9ca0ae0';
-const client = require('twilio')(accountSid, authToken);
+const client = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_AUTH);
 
 const twilioPhoneNumber = '+15615677611'
 const mihaiPhoneNumber = '+19545361700'
