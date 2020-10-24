@@ -27,9 +27,21 @@ const SENDINBLUE_API_KEY = 'xkeysib-4a6f34695b02056690f0f4494fbee6f386fff24cd173
 //   console.log('...', resp.results[0].geometry)
 // }
 
+const addresses = [
+  '1000 S Ocean Blvd,Boca Raton FL, 33432',
+  '10217 Sleepy Way Brk  Boca Raton  FL  33428',
+  '4851 Sugar Pine Dr  Boca Raton  FL  33487',
+  '1050 NW 15th Ave  Boca Raton  FL  33486',
+  '4157 Cedar Creek Rd   Boca Raton  FL  33487'
+]
+
 const run = async () => {
-  const hello = await Geocode.getLatLon('854 Broken Sound Pkwy NW, Boca Raton, FL 33487')
-  console.log('hello is', hello)
+  // const hello = await Geocode.getLatLon('854 Broken Sound Pkwy NW, Boca Raton, FL 33487')
+  for (let i = 0; i < addresses.length; i++) {
+    const address = addresses[i]
+    const hello = await Geocode.getLatLon(address)
+    console.log('hello', i, 'is', hello)
+  }
 }
 
 run()
