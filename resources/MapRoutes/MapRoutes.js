@@ -102,6 +102,7 @@ MapRoutes.mapRoutesWithDrivers = (originObj, locationList, mapResponse) => {
     let link = 'https://www.google.com/maps/dir/'
     const distance = vehicles[parseInt(driverIndex, 10)].miles
     const time = vehicles[parseInt(driverIndex, 10)].minutes
+    const stops = routeList.length - 1;
     let embedMapUrl = `https://www.google.com/maps/embed/v1/directions?key=${process.env.GOOGLE_API_KEY}&origin=${originObj.lat},${originObj.lon}`
     if (routeList.length > 2) {
       embedMapUrl += `&waypoints=`
@@ -134,6 +135,7 @@ MapRoutes.mapRoutesWithDrivers = (originObj, locationList, mapResponse) => {
       distance,
       time,
       embedMapUrl,
+      stops
     }
   })
   return driverRouteLinks

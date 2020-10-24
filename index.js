@@ -92,15 +92,13 @@ var upload = multer({ storage: uploadStorageConfig });
 
 app.post('/api/csv', upload.single('excel'), async (req, res) => {
   console.log('whats up duck', req.body)
-  let { body: { drivers } } = req
+  let { body: { drivers, agencyName } } = req
   const file = req.file
 
-  const result = await AppManager.openExcel(drivers, file)
+  console.log('drivers..', drivers, 'agency name ..', agencyName)
 
-  console.log('Drivers', drivers)
-  return res.status(200).json({
-    success: true
-  })
+  const result = await AppManager.openExcel(drivers, file)
+  return res.status(200).json(result)
 });
 
 app.listen(port, () => {
