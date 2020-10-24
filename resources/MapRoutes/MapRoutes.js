@@ -102,31 +102,50 @@ MapRoutes.mapRoutesWithDrivers = (originObj, locationList, mapResponse) => {
     let link = 'https://www.google.com/maps/dir/'
     const distance = vehicles[parseInt(driverIndex, 10)].miles
     const time = vehicles[parseInt(driverIndex, 10)].minutes
+    let embedMapUrl = `https://www.google.com/maps/embed/v1/directions?key=${process.env.GOOGLE_API_KEY}&origin=${originObj.lat},${originObj.lon}`
+    if (routeList.length > 2) {
+      embedMapUrl += `&waypoints=`
+    }
 
-    routeList.forEach(routeIndex => {
+    // go through each route destination and build embed link and maps link
+    routeList.forEach((routeIndex, index) => {
       if (parseInt(routeIndex, 10) === 0) {
         return link += originObj.lat + ',' + originObj.lon + '/'
       }
       const locationObject = locationList[parseInt(routeIndex, 10) - 1]
       link += locationObject.lat + ',' + locationObject.lon + '/'
-    })
 
-    console.log('humanized time is', moment.duration({"minutes": time}).humanize())
+      const isLastWaypoint = routeList.length === parseInt(index) + 1;
+      const isBeforeLastWaypoint = routeList.length === parseInt(index) + 2;
+      if (isLastWaypoint) {
+        embedMapUrl += `&destination=${locationObject.lat},${locationObject.lon}`
+      } else {
+        if (isBeforeLastWaypoint) {
+          embedMapUrl += `${locationObject.lat},${locationObject.lon}`
+        } else {
+          embedMapUrl += `${locationObject.lat},${locationObject.lon}|`
+        }
+      }
+    })
+    // console.log('humanized time is', moment.duration({"minutes": time}).humanize())
 
     driverRouteLinks[driverIndex] = {
       link,
       distance,
-      time
+      time,
+      embedMapUrl,
     }
   })
   return driverRouteLinks
 }
 
 
-// 3rd party service which has no authentication implements th
+// 3rd party service which has no authentication validation
 MapRoutes.getShortestRoutes = async (originObj = sampleOrigin, locationList, drivers) => {
   try {
     const body = getRequestData(originObj, locationList, drivers)
+
+    // USE REAL DATA:
     // const response = await fetch("http://www.speedyroute.com/optimize", {
     //   "headers": {
     //     "accept": "application/json, text/javascript, */*; q=0.01",
@@ -145,15 +164,17 @@ MapRoutes.getShortestRoutes = async (originObj = sampleOrigin, locationList, dri
     //   "mode": "cors"
     // });
     // const resp = await response.json()
-    // return resp;
+    // console.log('MAP ROUTE RESPONSE TO SAVE:', resp)
+    // return MapRoutes.mapRoutesWithDrivers(originObj, locationList, response);
+
+
+    // USE SAMPLE DATA:
     console.log('I AM USING A SAMPLE RESPONSE')
-    // return SHORT_SAMPLE.responseData.route
-    const route = SHORT_SAMPLE.responseData.route;
     return MapRoutes.mapRoutesWithDrivers(originObj, locationList, SHORT_SAMPLE.responseData);
   } catch (err) {
-    console.error('MapRoutes.getShortestRoutes error', err)
-    console.error('MapRoutes.getShortestRoutes FAILED. return sample data in this case:')
-    return SHORT_SAMPLE.responseData.route
+    console.error('MapRoutes.getShortestRoutes API error', err)
+    console.error('MapRoutes.getShortestRoutes use sample data instead!')
+    return MapRoutes.mapRoutesWithDrivers(originObj, locationList, SHORT_SAMPLE.responseData);
   }
 }
 
