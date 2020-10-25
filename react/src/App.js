@@ -15,36 +15,40 @@ const VIEWS = {
 }
 
 function App() {
-  const [view, setView] = useState(VIEWS.ROUTING_LIST)
+  const [view, setView] = useState(VIEWS.ENTER_NAME)
   const [data, setData] = useState({
-    agencyName: '',
+    agencyAddress: '',
     drivers: 1,
     apiResponse: undefined
   })
 
   const upload = (file) => {
-    const requestData = new FormData()
-    requestData.append('excel', file)
-    requestData.append('drivers', data.drivers)
-    requestData.append('agencyName', data.agencyName)
+    try {
+      const requestData = new FormData()
+      requestData.append('excel', file)
+      requestData.append('drivers', data.drivers)
+      requestData.append('agencyAddress', data.agencyAddress)
 
-    fetch('https://api-gsb.ngrok.io/api/csv', {
-      method: 'POST',
-      body: requestData
-    })
-    .then(response => response.json())
-    .then(response => {
-      console.log('response is', response)
-      setData({ ...data, apiResponse: response })
-      setView(VIEWS.ROUTING_LIST)
-    })
+      fetch('https://api-gsb.ngrok.io/api/csv', {
+        method: 'POST',
+        body: requestData
+      })
+      .then(response => response.json())
+      .then(response => {
+        console.log('response is', response)
+        setData({ ...data, apiResponse: response })
+        setView(VIEWS.ROUTING_LIST)
+      })
+    } catch (err) {
+      console.error('App.js upload error', err)
+    }
   }
 
   if (view === VIEWS.ENTER_NAME) {
     return (
       <EnterName
-        next={(agencyName) => {
-          setData({ ...data, agencyName });
+        next={(agencyAddress) => {
+          setData({ ...data, agencyAddress });
           setView(VIEWS.COUNT_DRIVERS)
         }}
       />
