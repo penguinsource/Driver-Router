@@ -22,6 +22,24 @@ function App() {
     apiResponse: undefined
   })
 
+  const upload = (file) => {
+    const requestData = new FormData()
+    requestData.append('excel', file)
+    requestData.append('drivers', data.drivers)
+    requestData.append('agencyName', data.agencyName)
+
+    fetch('https://api-gsb.ngrok.io/api/csv', {
+      method: 'POST',
+      body: requestData
+    })
+    .then(response => response.json())
+    .then(response => {
+      console.log('response is', response)
+      setData({ ...data, apiResponse: response })
+      setView(VIEWS.ROUTING_LIST)
+    })
+  }
+
   if (view === VIEWS.ENTER_NAME) {
     return (
       <EnterName
@@ -48,21 +66,7 @@ function App() {
     return (
       <UploadSpreadsheet
         submit={(file) => {
-          const requestData = new FormData()
-          requestData.append('excel', file)
-          requestData.append('drivers', data.drivers)
-          requestData.append('agencyName', data.agencyName)
-
-          fetch('https://api-gsb.ngrok.io/api/csv', {
-            method: 'POST',
-            body: requestData
-          })
-          .then(response => response.json())
-          .then(response => {
-            console.log('response is', response)
-            setData({ ...data, apiResponse: response })
-            setView(VIEWS.ROUTING_LIST)
-          })
+          upload(file)
         }}
       />
     )
