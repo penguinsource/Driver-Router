@@ -36,7 +36,5 @@ Hello! A few notes on the project:
 
 - We have an auto-complete admin function used in the demo in order to efficiently display our web-apps functionality
 
-- In the unlikely case there is a failure on the speedyroute endpoint, there is an error catching block which returns sample data.
 
-
-Matt and Mihai
+**Matt and Mihai**
