@@ -36,4 +36,4 @@ Hello! A few notes on the project:
 
 - Presentation - https://drive.google.com/file/d/1UceHXkHnXeE3alPyfRh_UX_lqF7PRuHM/view?fbclid=IwAR1bIwqppSU1xhVNWSq7S3ekfJqkjfAJRVUjsqT7NgNrB9gb4hSvNNJg8Gw
 
-**Matt and Mihai - Team GetSpeedBack**
+**Matt and Mihai - Team GetSpeedBack.com**
