@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import EnterName from './views/EnterName'
 import CountDrivers from './views/CountDrivers'
 import UploadSpreadsheet from './views/UploadSpreadsheet'
 import RoutingList from './views/RoutingList'
-import logo from './logo.svg';
 import './App.css';
 import './tailwind.output.css';
 
@@ -35,7 +34,6 @@ function App() {
       })
       .then(response => response.json())
       .then(response => {
-        console.log('response is', response)
         setData({ ...data, apiResponse: response })
         setView(VIEWS.ROUTING_LIST)
       })

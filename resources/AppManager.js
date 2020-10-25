@@ -44,7 +44,6 @@ AppManager.openExcel = async (drivers, fileObject, agencyAddress) => {
 AppManager.sendRoutesInfo = async (data) => {
   try {
     const promiseList = []
-
     for (let i = 0; i < Object.keys(data).length; i++) {
       const driverObject = data[i]
       const smsMessage = `Hey ${driverObject.driverName}, here is your route for today's deliveries.\nClick this link to open your directions and begin navigating.\n\n${driverObject.link}`
@@ -53,9 +52,7 @@ AppManager.sendRoutesInfo = async (data) => {
       promiseList.push(smsPromise)
       promiseList.push(emailPromise)
     }
-
     await Promise.all(promiseList)
-
     return {
       success: true
     }

@@ -5,10 +5,6 @@ import Modal from '../components/Modal'
 const UP_ARROW = "https://storage.googleapis.com/publicapeedback/router/up-arrow.png"
 const DOWN_ARROW = "https://storage.googleapis.com/publicapeedback/router/down-arrow.png"
 
-// SAMPLE DATA FOR TESTING ONLY
-const sample = {"success":true,"routes":{"0":{"link":"https://www.google.com/maps/dir/26.3976391,-80.1067828/26.3369831,-80.07121579999999/26.3386633,-80.2061394/","distance":16.8,"time":44,"embedMapUrl":"https://www.google.com/maps/embed/v1/directions?key=AIzaSyB1lsjXlikz-q7pMNliSGsoVE7zXB_wTcY&origin=26.3976391,-80.1067828&waypoints=26.3369831,-80.07121579999999&destination=26.3386633,-80.2061394","stops":2},"1":{"link":"https://www.google.com/maps/dir/26.3976391,-80.1067828/26.359936,-80.11565499999999/26.4149651,-80.1194131/26.4129184,-80.1070227/","distance":11.9,"time":31,"embedMapUrl":"https://www.google.com/maps/embed/v1/directions?key=AIzaSyB1lsjXlikz-q7pMNliSGsoVE7zXB_wTcY&origin=26.3976391,-80.1067828&waypoints=26.359936,-80.11565499999999|26.4149651,-80.1194131&destination=26.4129184,-80.1070227","stops":3}}}
-const veryShortSample = {"success":true,"routes":{"0":{"link":"https://www.google.com/maps/dir/26.3976391,-80.1067828/26.3369831,-80.07121579999999/25.6262721,-80.3916639/","distance":71.2,"time":98,"humanizedTime":true,"embedMapUrl":"https://www.google.com/maps/embed/v1/directions?key=AIzaSyB1lsjXlikz-q7pMNliSGsoVE7zXB_wTcY&origin=26.3976391,-80.1067828&waypoints=26.3369831,-80.07121579999999&destination=25.6262721,-80.3916639","stops":2}}}
-
 const isSendRoutesBtnDisabled = (routes) => {
   let isDisabled = false
   Object.keys(routes).forEach(routeKey => {
@@ -24,7 +20,6 @@ const RoutingList = ({ responseData, reset }) => {
   const [loading, setLoading] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [isDisabled, setIsDisabled] = useState(true)
-  const { routes } = responseData;
   const [data, setData] = useState(undefined)
   useEffect(() => {
     if (responseData && responseData.routes) {
@@ -32,9 +27,6 @@ const RoutingList = ({ responseData, reset }) => {
       setIsDisabled(isSendRoutesBtnDisabled(responseData.routes))
     }
   }, [responseData])
-
-  // const [data, setData] = useState(sample.routes)
-  // const [isDisabled, setIsDisabled] = useState(isSendRoutesBtnDisabled(sample.routes))
 
   const update = (routeKey, valueKey, value) => {
     const route = data[routeKey]
@@ -62,7 +54,6 @@ const RoutingList = ({ responseData, reset }) => {
     })
       .then(response => response.json())
       .then(response => {
-        console.log('send routes response', response)
         setLoading(false)
         setShowModal(true)
       })
@@ -70,7 +61,6 @@ const RoutingList = ({ responseData, reset }) => {
 
   const fillForms = () => {
     const newData = {...data}
-    console.log('data is', data)
     if (newData['0']) {
       newData['0'] = {
         ...newData['0'],
@@ -106,9 +96,9 @@ const RoutingList = ({ responseData, reset }) => {
     if (newData['4']) {
       newData['4'] = {
         ...newData['4'],
-        driverName: 'Thomas',
-        phone: '5617570137',
-        email: 'thomastollar@gmail.com'
+        driverName: 'Sam',
+        phone: '5612139375',
+        email: 'samatnet4@gmail.com'
       }
     }
     setData(newData)
@@ -122,14 +112,14 @@ const RoutingList = ({ responseData, reset }) => {
       </button>
       {
         loading ? (
-          <img className="absolute" src="https://storage.googleapis.com/publicapeedback/router/loading.gif" />
+          <img alt="loading" className="absolute" src="https://storage.googleapis.com/publicapeedback/router/loading.gif" />
         ) : null
       }
       {
         showModal ? (
           <Modal close={() => { setShowModal(false) }} classes="">
             <div>
-              <img className="mx-auto pt-10" src="https://storage.googleapis.com/publicapeedback/router/success-icon.png" />
+              <img alt="loading" className="mx-auto pt-10" src="https://storage.googleapis.com/publicapeedback/router/success-icon.png" />
             </div>
             <p className="text-3xl mb-6 mt-5 font-bold">Sending Successful</p>
             <p className="text-xl">Way to go! Your routing information has been sent to your team.</p>
@@ -140,7 +130,7 @@ const RoutingList = ({ responseData, reset }) => {
         ) : null
       }
       <div className="">
-        <img className="mx-auto pt-10" src="https://storage.googleapis.com/publicapeedback/router/router-logo.png" />
+        <img alt="loading" className="mx-auto pt-10" src="https://storage.googleapis.com/publicapeedback/router/router-logo.png" />
       </div>
       <div className="mt-12 text-center mx-auto shadow w-5/6 border border-border-gray rounded-md mb-6">
         <div className="py-4 border-b-1 bg-light-gray rounded-md border-b border-border-gray rounded-b-none">
@@ -210,7 +200,7 @@ const RoutingList = ({ responseData, reset }) => {
                             })
                           }}
                         >
-                          <img className="w-8" src={DOWN_ARROW} />
+                          <img alt="down-arrow" className="w-8" src={DOWN_ARROW} />
                         </button>
                       ) : (
                         <button
@@ -221,7 +211,7 @@ const RoutingList = ({ responseData, reset }) => {
                             })
                           }}
                         >
-                          <img className="w-8" src={UP_ARROW} />
+                          <img alt="up-arrow" className="w-8" src={UP_ARROW} />
                         </button>
                       )
                     }
@@ -231,6 +221,7 @@ const RoutingList = ({ responseData, reset }) => {
                   show ? (
                     <div className="">
                       <iframe
+                        title="google-maps-iframe"
                         width="100%"
                         height="450"
                         frameBorder="0"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import unsortedAgencies from './agencies'
 
 const initialAgency = unsortedAgencies.find(agency => agency.name === "31749 C Boca Helping Hands- West Boca")
@@ -10,15 +10,15 @@ const EnterName = ({ next }) => {
   return (
     <div className="App bg-gray h-screen">
       <div className="">
-        <img className="mx-auto pt-10" src="https://storage.googleapis.com/publicapeedback/router/router-logo.png" />
+        <img alt="router" className="mx-auto pt-10" src="https://storage.googleapis.com/publicapeedback/router/router-logo.png" />
       </div>
-      <img className="mx-auto mt-32 mb-8" src="https://storage.googleapis.com/publicapeedback/router/truck-icon.png" />
+      <img alt="truck" className="mx-auto mt-32 mb-8" src="https://storage.googleapis.com/publicapeedback/router/truck-icon.png" />
       <div className="w-auto text-center mx-auto">
         <p className="text-3xl mb-5 font-bold">Enter your agency name.</p>
         <select className="p-2" value={address} onChange={(e) => { setAddress(e.target.value) }}>
           {
             agencies.map(option => (
-              <option value={option.address}>{ option.name }</option>
+              <option key={option.address} value={option.address}>{ option.name }</option>
             ))
           }
         </select>
