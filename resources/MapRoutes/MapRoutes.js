@@ -98,7 +98,10 @@ MapRoutes.mapRoutesWithDrivers = (originObj, locationList, mapResponse) => {
       time,
       embedMapUrl,
       stops,
-      routing
+      routing,
+      phone: '',
+      driverName: '',
+      email: ''
     }
   })
   return driverRouteLinks
