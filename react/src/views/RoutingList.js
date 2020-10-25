@@ -21,20 +21,20 @@ const isSendRoutesBtnDisabled = (routes) => {
 }
 
 const RoutingList = ({ responseData, reset }) => {
+  const [loading, setLoading] = useState(false)
   const [showModal, setShowModal] = useState(false)
-  // const [isDisabled, setIsDisabled] = useState(true)
-  // const { routes } = responseData;
-  // const [data, setData] = useState(undefined)
-  // useEffect(() => {
-  //   if (responseData && responseData.routes) {
-  //     setData(responseData.routes)
-  //     console.log('is it disabled?', isSendRoutesBtnDisabled(responseData.routes))
-  //     setIsDisabled(isSendRoutesBtnDisabled(responseData.routes))
-  //   }
-  // }, [responseData])
+  const [isDisabled, setIsDisabled] = useState(true)
+  const { routes } = responseData;
+  const [data, setData] = useState(undefined)
+  useEffect(() => {
+    if (responseData && responseData.routes) {
+      setData(responseData.routes)
+      setIsDisabled(isSendRoutesBtnDisabled(responseData.routes))
+    }
+  }, [responseData])
 
-  const [data, setData] = useState(sample.routes)
-  const [isDisabled, setIsDisabled] = useState(isSendRoutesBtnDisabled(sample.routes))
+  // const [data, setData] = useState(sample.routes)
+  // const [isDisabled, setIsDisabled] = useState(isSendRoutesBtnDisabled(sample.routes))
 
   const update = (routeKey, valueKey, value) => {
     const route = data[routeKey]
@@ -50,6 +50,7 @@ const RoutingList = ({ responseData, reset }) => {
   }
 
   const sendRoutes = () => {
+    setLoading(true)
     fetch('https://api-gsb.ngrok.io/api/sendRoutes', {
       method: 'POST',
       headers: {
@@ -62,12 +63,59 @@ const RoutingList = ({ responseData, reset }) => {
       .then(response => response.json())
       .then(response => {
         console.log('send routes response', response)
+        setLoading(false)
         setShowModal(true)
       })
   }
 
+  const fillForms = () => {
+    const newData = {...data}
+    console.log('data is', data)
+    if (newData['0']) {
+      newData['0'] = {
+        ...newData['0'],
+        driverName: 'Matt',
+        phone: '5614453344',
+        email: 'matt@getspeedback.com'
+      }
+    }
+    if (newData['1']) {
+      newData['1'] = {
+        ...newData['1'],
+        driverName: 'Mihai',
+        phone: '9545361700',
+        email: 'mihai@getspeedback.com'
+      }
+    }
+    if (newData['2']) {
+      newData['2'] = {
+        ...newData['2'],
+        driverName: 'David',
+        phone: '5612893240',
+        email: 'davidfromcali@gmail.com'
+      }
+    }
+    if (newData['3']) {
+      newData['3'] = {
+        ...newData['3'],
+        driverName: 'Gaby',
+        phone: '5082844614',
+        email: 'g.averypeck@gmail.com'
+      }
+    }
+    setData(newData)
+  }
+
   return (
     <div className="App bg-gray h-screen pb-12">
+      <button className="absolute mr-3 mt-2 right-0" onClick={fillForms}>
+        For Demo: Fill forms out
+      </button>
+      {
+        loading ? (
+          <img className="absolute" src="https://storage.googleapis.com/publicapeedback/router/loading.gif" />
+        ) : null
+      }
       {
         showModal ? (
           <Modal close={() => { setShowModal(false) }} classes="">

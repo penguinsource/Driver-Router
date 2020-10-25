@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import agencies from './agencies'
+import unsortedAgencies from './agencies'
 
-const initialAgency = agencies.find(agency => agency.name === "31749 C Boca Helping Hands- West Boca")
+const initialAgency = unsortedAgencies.find(agency => agency.name === "31749 C Boca Helping Hands- West Boca")
+const agencies = unsortedAgencies.sort((a, b) => (a.name > b.name) ? 1 : -1)
 
 const EnterName = ({ next }) => {
   const [address, setAddress] = useState(initialAgency.address)

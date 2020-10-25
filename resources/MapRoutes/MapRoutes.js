@@ -136,12 +136,11 @@ MapRoutes.getShortestRoutes = async (originObj = sampleOrigin, locationList, dri
     // console.log('BOTTOM ================================================================')
     // return MapRoutes.mapRoutesWithDrivers(originObj, locationList, resp);
 
-
     // USE SAMPLE DATA:
     // console.log('I AM USING A SAMPLE RESPONSE')
-    return MapRoutes.mapRoutesWithDrivers(originObj, locationList, SHORT_SAMPLE.responseData);
+    // return MapRoutes.mapRoutesWithDrivers(originObj, locationList, SHORT_SAMPLE.responseData);
     // return MapRoutes.mapRoutesWithDrivers(originObj, locationList, VERY_SHORT_SAMPLE.responseData);
-    // return MapRoutes.mapRoutesWithDrivers(originObj, locationList, LARGE_70.responseData);
+    return MapRoutes.mapRoutesWithDrivers(originObj, locationList, LARGE_70.responseData);
   } catch (err) {
     console.error('MapRoutes.getShortestRoutes API error', err)
     console.error('MapRoutes.getShortestRoutes use sample data instead!')
