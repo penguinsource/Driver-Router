@@ -1,0 +1,92 @@
+@import '../../style/variables.scss';
+
+.speedback-modal {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: $background-black;
+  z-index: 9;
+}
+
+.speedback-modal-inner-max {
+  position: relative;
+  top: 10px;
+  width: 900px;
+  height: 97%;
+  margin: 0 auto
+}
+
+.speedback-modal-content-max {
+  position: relative;
+  text-align: center;
+  background: white;
+  height: 98%;
+  border-radius: 2px;
+  overflow-y: scroll;
+}
+
+.speedback-modal-inner-md {
+  position: relative;
+  top: 50px;
+  width: 65%;
+  max-width: 700px;
+  margin: 0 auto;
+  height: 80%;
+  max-height: 600px;
+}
+
+.speedback-modal-inner-sm {
+  position: relative;
+  top: 50px;
+  width: 65%;
+  max-width: 700px;
+  margin: 0 auto;
+  height: 60%;
+  max-height: 600px;
+}
+
+.speedback-modal-content-md {
+  position: relative;
+  text-align: center;
+  background: white;
+  min-height: 250px;
+  border-radius: 2px;
+  overflow-y: scroll;
+  padding: 20px;
+  overflow: scroll;
+  height: 100%;
+}
+
+.speedback-modal-content-sm {
+  position: relative;
+  text-align: center;
+  background: white;
+  min-height: 150px;
+  border-radius: 2px;
+  overflow-y: scroll;
+  padding: 20px;
+  overflow: scroll;
+  height: 100%;
+}
+
+.animation-1 {
+  background: linear-gradient(to right, $white 50%, $hover-gray 50%);
+  background-size: 200% 100%;
+  background-position:left bottom;
+  margin-left:10px;
+  /* transition: all 2s ease; */
+  transition: all 2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+  &:hover {
+    background-position:right bottom;
+  }
+}
+
+.speedback-modal-close-button {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  z-index: 99;
+}

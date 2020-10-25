@@ -15,7 +15,7 @@ const VIEWS = {
 }
 
 function App() {
-  const [view, setView] = useState(VIEWS.UPLOAD_SPREADSHEET)
+  const [view, setView] = useState(VIEWS.ROUTING_LIST)
   const [data, setData] = useState({
     agencyName: '',
     drivers: 1,
@@ -72,6 +72,7 @@ function App() {
     return (
       <RoutingList
         responseData={data.apiResponse}
+        reset={() => { setView(VIEWS.ENTER_NAME) }}
       />
     )
   }

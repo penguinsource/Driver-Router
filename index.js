@@ -89,18 +89,14 @@ var uploadStorageConfig = multer.diskStorage({
       cb(null, FILE_DESTINATION);
     },
     filename: function (req, file, cb) {
-      console.log('hii', file);
       cb(null, `${file.originalname}`);
     }
 });
 var upload = multer({ storage: uploadStorageConfig });
 
 app.post('/api/csv', upload.single('excel'), async (req, res) => {
-  console.log('whats up duck', req.body)
   let { body: { drivers, agencyName } } = req
   const file = req.file
-
-  console.log('drivers..', drivers, 'agency name ..', agencyName)
 
   const result = await AppManager.openExcel(drivers, file)
   return res.status(200).json(result)

@@ -14,7 +14,10 @@ module.exports = {
         'input-border-gray': '#e2e8f0',
         'dark-gray': '#727885',
         'teal': '#38b2ac',
-        'hover-teal': '#319795'
+        'hover-teal': '#319795',
+        'red': '#FC8181',
+        'hover-red': '#F85F5F',
+        'disabled-gray': '#cbd5e0'
       }
     },
   },

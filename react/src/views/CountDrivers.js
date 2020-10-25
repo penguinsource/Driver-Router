@@ -21,7 +21,7 @@ const CountDrivers = ({ next }) => {
           }
         </select>
       </div>
-      <button onClick={() => { next(drivers) }} class="hover:bg-hover-teal rounded-full shadow px-10 py-3 bg-teal text-white mt-8 text-xl font-bold">Next</button>
+      <button onClick={() => { next(drivers) }} className="hover:bg-hover-teal rounded-full shadow px-10 py-3 bg-teal text-white mt-8 text-xl font-bold">Next</button>
     </div>
   )
 }

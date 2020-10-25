@@ -12,7 +12,7 @@ const EnterName = ({ next }) => {
         <p className="text-3xl mb-5 font-bold">Enter your agency name.</p>
         <input value={name} onChange={(e) => { setName(e.target.value) }} className="mx-auto w-64 px-3 py-2 rounded-sm text-center" type="text" placeholder="The Soup Kitchen" />
       </div>
-      <button onClick={() => { next(name) }} class="hover:bg-hover-teal rounded-full shadow px-10 py-3 bg-teal text-white mt-8 text-xl font-bold">Next</button>
+      <button onClick={() => { next(name) }} className="hover:bg-hover-teal rounded-full shadow px-10 py-3 bg-teal text-white mt-8 text-xl font-bold">Next</button>
     </div>
   )
 }

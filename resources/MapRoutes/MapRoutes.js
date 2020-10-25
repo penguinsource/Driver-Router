@@ -1,49 +1,11 @@
 const fetch = require('node-fetch')
 const moment = require('moment')
 
-const MapRoutes = {}
+const SHORT_SAMPLE = require('./sampleData/short')
+const VERY_SHORT_SAMPLE = require('./sampleData/veryShort')
+const LARGE_70 = require('./sampleData/large_70')
 
-// const sampleBody = {
-//   depot: {
-//     lat: 26.3976391,
-//     lon: -80.1067828,
-//     name: "850 Broken Sound Parkway Northwest, Boca Raton, FL, USA",
-//   },
-//   locations: [
-//     {
-//       lat: 26.3976533,
-//       lon: -80.10714639999999,
-//       name: "854 Broken Sound Parkway Northwest, Boca Raton, FL, USA",
-//     },
-//     {
-//       lat: 26.4049305,
-//       lon: -80.1680086,
-//       name: "6318 Somerset Cir, Boca Raton, FL 33496, USA"
-//     },
-//     {
-//       lat: 26.457825,
-//       lon: -80.09448,
-//       name: "250 Congress Park Dr, Delray Beach, FL 33445, USA"
-//     },
-//     {
-//       lat: 26.3541154,
-//       lon: -80.08530859999999,
-//       name: "Mizner Park, 327 Plaza Real, Boca Raton, FL 33432, USA"
-//     }
-//   ],
-//   hasFinish: false,
-//   loop: true,
-//   override: false,
-//   realTime: false,
-//   reloadable: true,
-//   reversible: false,
-//   showPlaces: false,
-//   startHour: 8,
-//   startTime: 0,
-//   timeboxing: false,
-//   uploadAvailable: true,
-//   vehicles: 3
-// }
+const MapRoutes = {}
 
 const sampleOrigin = {
   lat: 26.3976391,
@@ -93,14 +55,12 @@ const getRequestData = (originObj, locationList, drivers) => {
   }
 }
 
-const SHORT_SAMPLE = require('./sampleData/short')
-const VERY_SHORT_SAMPLE = require('./sampleData/veryShort')
-
 MapRoutes.mapRoutesWithDrivers = (originObj, locationList, mapResponse) => {
   const { route: routeList, vehicles } = mapResponse
   let driverRouteLinks = {}
   routeList.forEach((routeList, driverIndex) => {
     let link = 'https://www.google.com/maps/dir/'
+    const routing = [originObj]
     const distance = vehicles[parseInt(driverIndex, 10)].miles
     const time = vehicles[parseInt(driverIndex, 10)].minutes
     const stops = routeList.length - 1;
@@ -111,14 +71,16 @@ MapRoutes.mapRoutesWithDrivers = (originObj, locationList, mapResponse) => {
 
     // go through each route destination and build embed link and maps link
     routeList.forEach((routeIndex, index) => {
+      const isLastWaypoint = routeList.length === parseInt(index) + 1;
+      const isBeforeLastWaypoint = routeList.length === parseInt(index) + 2;
+
       if (parseInt(routeIndex, 10) === 0) {
         return link += originObj.lat + ',' + originObj.lon + '/'
       }
       const locationObject = locationList[parseInt(routeIndex, 10) - 1]
       link += locationObject.lat + ',' + locationObject.lon + '/'
+      routing.push(locationObject)
 
-      const isLastWaypoint = routeList.length === parseInt(index) + 1;
-      const isBeforeLastWaypoint = routeList.length === parseInt(index) + 2;
       if (isLastWaypoint) {
         embedMapUrl += `&destination=${locationObject.lat},${locationObject.lon}`
       } else {
@@ -134,15 +96,13 @@ MapRoutes.mapRoutesWithDrivers = (originObj, locationList, mapResponse) => {
       link,
       distance,
       time,
-      // humanizedTime: moment.duration({ "minutes": time }).humanize(),
-      // humanizedTime: moment.relativeTimeThreshold('m', time),
       embedMapUrl,
-      stops
+      stops,
+      routing
     }
   })
   return driverRouteLinks
 }
-
 
 // 3rd party service which has no authentication validation
 MapRoutes.getShortestRoutes = async (originObj = sampleOrigin, locationList, drivers) => {
@@ -168,14 +128,17 @@ MapRoutes.getShortestRoutes = async (originObj = sampleOrigin, locationList, dri
     //   "mode": "cors"
     // });
     // const resp = await response.json()
+    // console.log('TOP ================================================================')
     // console.log('MAP ROUTE RESPONSE TO SAVE:', resp)
+    // console.log('BOTTOM ================================================================')
     // return MapRoutes.mapRoutesWithDrivers(originObj, locationList, resp);
 
 
     // USE SAMPLE DATA:
     // console.log('I AM USING A SAMPLE RESPONSE')
-    // return MapRoutes.mapRoutesWithDrivers(originObj, locationList, SHORT_SAMPLE.responseData);
-    return MapRoutes.mapRoutesWithDrivers(originObj, locationList, VERY_SHORT_SAMPLE.responseData);
+    return MapRoutes.mapRoutesWithDrivers(originObj, locationList, SHORT_SAMPLE.responseData);
+    // return MapRoutes.mapRoutesWithDrivers(originObj, locationList, VERY_SHORT_SAMPLE.responseData);
+    // return MapRoutes.mapRoutesWithDrivers(originObj, locationList, LARGE_70.responseData);
   } catch (err) {
     console.error('MapRoutes.getShortestRoutes API error', err)
     console.error('MapRoutes.getShortestRoutes use sample data instead!')
