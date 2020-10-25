@@ -19,6 +19,10 @@ const UploadSpreadsheet = ({ submit }) => {
           class="custom-file-input"
         />
       </div>
+      <div>
+        <p class="text-2xl mt-24 mb-6 text-dark-gray">How to format your spreadsheet</p>
+        <img className="mx-auto mb-8" src="https://storage.googleapis.com/publicapeedback/router/format-example.png" />
+      </div>
     </div>
   )
 }

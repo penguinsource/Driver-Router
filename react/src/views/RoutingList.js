@@ -13,6 +13,12 @@ const RoutingList = ({ responseData }) => {
   //   setData(responseData.routes)
   // }, [responseData])
 
+  Object.keys(sample.routes).forEach(routeKey => {
+    const route = sample.routes[routeKey]
+    route.phone = route.phone ? route.phone : ''
+    route.driverName = route.driverName ? route.driverName : ''
+    route.email = route.email ? route.email : ''
+  })
   const [data, setData] = useState(sample.routes)
 
   return (
@@ -36,9 +42,18 @@ const RoutingList = ({ responseData }) => {
           data && Object.keys(data).map((routeKey, index) => {
             const route = data[routeKey]
             const show = data[routeKey].show
-            console.log('show is', show)
+
+            // return (
+            //   <RouteRow
+            //     route={route}
+            //     update={() => {
+                  
+            //     }}
+            //   />
+            // )
+
             return (
-              <div key={index} className="pt-4 border-b-1 bg-white">
+              <div key={`${index}_${route.link}`} className="pt-4 border-b-1 bg-white">
                 <div className="border-b border-border-gray pb-3">
                   <p className="inline-block w-1/12 text-left align-top pt-1">Route {parseInt(index, 10) + 1}</p>
                   <p className="inline-block w-1/12 text-left align-top pt-1">{ route.stops }</p>
@@ -47,6 +62,16 @@ const RoutingList = ({ responseData }) => {
                   <p className="inline-block w-2/12 text-left align-top">
                     <input
                       type="text"
+                      value={route.driverName}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          [routeKey]: {
+                            ...route,
+                            driverName: e.target.value
+                          }
+                        })
+                      }}
                       className="px-3 py-1 border border-input-border-gray rounded-sm"
                       placeholder="Driver Name"
                     />
@@ -54,12 +79,12 @@ const RoutingList = ({ responseData }) => {
                   <p className="inline-block w-2/12 text-left align-top">
                     <input
                       type="text"
-                      value={data[routeKey].phone}
+                      value={route.phone}
                       onChange={(e) => {
                         setData({
                           ...data,
                           [routeKey]: {
-                            ...data[routeKey],
+                            ...route,
                             phone: e.target.value
                           }
                         })
@@ -73,6 +98,16 @@ const RoutingList = ({ responseData }) => {
                       type="text"
                       className="px-3 py-1 border border-input-border-gray rounded-sm"
                       placeholder="matt@router.com"
+                      value={route.email}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          [routeKey]: {
+                            ...route,
+                            email: e.target.value
+                          }
+                        })
+                      }}
                     />
                   </p>
                   <p className="inline-block w-1/12 pl-5">
@@ -126,7 +161,12 @@ const RoutingList = ({ responseData }) => {
         onClick={() => {
           fetch('https://api-gsb.ngrok.io/api/sendRoutes', {
             method: 'POST',
-            body: data
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              data
+            })
           })
             .then(response => response.json())
             .then(response => {

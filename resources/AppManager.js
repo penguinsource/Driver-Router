@@ -1,6 +1,7 @@
 const csvtojson = require('csvtojson')
 const Geocode = require('./Geocode')
 const MapRoutes = require('./MapRoutes/MapRoutes')
+const SendSMS = require('./SMS')
 
 const AppManager = {}
 
@@ -32,6 +33,31 @@ AppManager.openExcel = async (drivers, fileObject) => {
   return {
     success: true,
     routes
+  }
+}
+
+AppManager.sendRoutesInfo = async (data) => {
+  try {
+    const promiseList = []
+
+    for (let i = 0; i < Object.keys(data).length; i++) {
+      const driverObject = data[i]
+      const smsMessage = `Hey ${driverObject.driverName}, here is your route for today's deliveries. Click this link to open your directions and begin navigating. <br /> ${driverObject.link}`
+      const promise = SendSMS(driverObject.phone, smsMessage)
+      return;
+    }
+
+    await Promise.all(promiseList)
+
+    return {
+      success: true
+    }
+  } catch (err) {
+    console.error('AppManager.sendRoutesInfo error', err)
+    return {
+      success: false,
+      error: err
+    }
   }
 }
 

@@ -12,6 +12,7 @@ module.exports = {
         'white': '#ffffff',
         'border-gray': '#cbd5e0',
         'input-border-gray': '#e2e8f0',
+        'dark-gray': '#727885',
         'teal': '#38b2ac',
         'hover-teal': '#319795'
       }

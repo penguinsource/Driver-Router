@@ -97,10 +97,8 @@ const SHORT_SAMPLE = require('./sampleData/short')
 const VERY_SHORT_SAMPLE = require('./sampleData/veryShort')
 
 MapRoutes.mapRoutesWithDrivers = (originObj, locationList, mapResponse) => {
-  console.log('map response is', mapResponse)
   const { route: routeList, vehicles } = mapResponse
   let driverRouteLinks = {}
-  console.log('route list is', routeList)
   routeList.forEach((routeList, driverIndex) => {
     let link = 'https://www.google.com/maps/dir/'
     const distance = vehicles[parseInt(driverIndex, 10)].miles
@@ -116,8 +114,6 @@ MapRoutes.mapRoutesWithDrivers = (originObj, locationList, mapResponse) => {
       if (parseInt(routeIndex, 10) === 0) {
         return link += originObj.lat + ',' + originObj.lon + '/'
       }
-      console.log('locationList', locationList)
-      console.log('index', parseInt(routeIndex, 10) - 1)
       const locationObject = locationList[parseInt(routeIndex, 10) - 1]
       link += locationObject.lat + ',' + locationObject.lon + '/'
 
@@ -133,7 +129,6 @@ MapRoutes.mapRoutesWithDrivers = (originObj, locationList, mapResponse) => {
         }
       }
     })
-    // console.log('humanized time is', moment.duration({"minutes": time}).humanize())
 
     driverRouteLinks[driverIndex] = {
       link,

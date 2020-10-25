@@ -15,7 +15,7 @@ const VIEWS = {
 }
 
 function App() {
-  const [view, setView] = useState(VIEWS.ROUTING_LIST)
+  const [view, setView] = useState(VIEWS.UPLOAD_SPREADSHEET)
   const [data, setData] = useState({
     agencyName: '',
     drivers: 1,

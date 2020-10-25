@@ -2,9 +2,10 @@ const dotenv = require('dotenv');
 dotenv.config({ path: `./config/dev.env` });
 
 const express = require('express')
+const bodyParser = require('body-parser')
 const app = express()
-app.use(express.json({ limit: '50mb', extended: true }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+
 app.use((req, res, next) => {
   const origin = req.header('origin');
   res.header("Access-Control-Allow-Origin", origin);
@@ -28,6 +29,10 @@ const Geocode = require('./resources/Geocode')
 const port = 3005
 
 app.use(express.static('./react/build'))
+
+app.use(express.json({ limit: '50mb', extended: true }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.json())
 
 const fetch = require('node-fetch')
 
@@ -102,13 +107,8 @@ app.post('/api/csv', upload.single('excel'), async (req, res) => {
 });
 
 app.post('/api/sendRoutes', async (req, res) => {
-  console.log('send routes', req.body)
   let { body: { data } } = req
-  const file = req.file
-
-  console.log('drivers..', drivers, 'agency name ..', agencyName)
-
-  const result = await AppManager.openExcel(drivers, file)
+  const result = await AppManager.sendRoutesInfo(data)
   return res.status(200).json(result)
 });
 
