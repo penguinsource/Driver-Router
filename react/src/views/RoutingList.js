@@ -103,7 +103,16 @@ const RoutingList = ({ responseData, reset }) => {
         email: 'g.averypeck@gmail.com'
       }
     }
+    if (newData['4']) {
+      newData['4'] = {
+        ...newData['4'],
+        driverName: 'Thomas',
+        phone: '5617570137',
+        email: 'thomastollar@gmail.com'
+      }
+    }
     setData(newData)
+    setIsDisabled(false)
   }
 
   return (

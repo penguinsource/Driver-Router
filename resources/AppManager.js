@@ -47,7 +47,7 @@ AppManager.sendRoutesInfo = async (data) => {
 
     for (let i = 0; i < Object.keys(data).length; i++) {
       const driverObject = data[i]
-      const smsMessage = `Hey ${driverObject.driverName}, here is your route for today's deliveries.\n Click this link to open your directions and begin navigating. \n\n ${driverObject.link}`
+      const smsMessage = `Hey ${driverObject.driverName}, here is your route for today's deliveries.\nClick this link to open your directions and begin navigating.\n\n${driverObject.link}`
       const smsPromise = SendSMS(driverObject.phone, smsMessage)
       const emailPromise = SendEmail(driverObject.email, driverObject.driverName, driverObject.link)
       promiseList.push(smsPromise)
