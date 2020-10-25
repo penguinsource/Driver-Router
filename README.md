@@ -4,6 +4,7 @@ Hello! A few notes on the project:
 
 - This is a React micro-app with a Node back-end service
 - Step-by-step web-app allowing you to easily distribute map routing amongst multiple drivers
+- View screenshots and flow of how this app works at https://github.com/penguinsource/hackathon_2020/issues/1
 
 # Flow
 
