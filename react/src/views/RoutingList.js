@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Modal from '../components/Modal'
 
+// IMAGE URLs
 const UP_ARROW = "https://storage.googleapis.com/publicapeedback/router/up-arrow.png"
 const DOWN_ARROW = "https://storage.googleapis.com/publicapeedback/router/down-arrow.png"
 
+// SAMPLE DATA FOR TESTING ONLY
 const sample = {"success":true,"routes":{"0":{"link":"https://www.google.com/maps/dir/26.3976391,-80.1067828/26.3369831,-80.07121579999999/26.3386633,-80.2061394/","distance":16.8,"time":44,"embedMapUrl":"https://www.google.com/maps/embed/v1/directions?key=AIzaSyB1lsjXlikz-q7pMNliSGsoVE7zXB_wTcY&origin=26.3976391,-80.1067828&waypoints=26.3369831,-80.07121579999999&destination=26.3386633,-80.2061394","stops":2},"1":{"link":"https://www.google.com/maps/dir/26.3976391,-80.1067828/26.359936,-80.11565499999999/26.4149651,-80.1194131/26.4129184,-80.1070227/","distance":11.9,"time":31,"embedMapUrl":"https://www.google.com/maps/embed/v1/directions?key=AIzaSyB1lsjXlikz-q7pMNliSGsoVE7zXB_wTcY&origin=26.3976391,-80.1067828&waypoints=26.359936,-80.11565499999999|26.4149651,-80.1194131&destination=26.4129184,-80.1070227","stops":3}}}
 const veryShortSample = {"success":true,"routes":{"0":{"link":"https://www.google.com/maps/dir/26.3976391,-80.1067828/26.3369831,-80.07121579999999/25.6262721,-80.3916639/","distance":71.2,"time":98,"humanizedTime":true,"embedMapUrl":"https://www.google.com/maps/embed/v1/directions?key=AIzaSyB1lsjXlikz-q7pMNliSGsoVE7zXB_wTcY&origin=26.3976391,-80.1067828&waypoints=26.3369831,-80.07121579999999&destination=25.6262721,-80.3916639","stops":2}}}
-
-const optimize = (routes) => {
-  Object.keys(routes).forEach(routeKey => {
-    const route = routes[routeKey]
-    route.phone = route.phone ? route.phone : ''
-    route.driverName = route.driverName ? route.driverName : ''
-    route.email = route.email ? route.email : ''
-  })
-
-  return routes
-}
 
 const isSendRoutesBtnDisabled = (routes) => {
   let isDisabled = false
@@ -36,16 +27,14 @@ const RoutingList = ({ responseData, reset }) => {
   // const [data, setData] = useState(undefined)
   // useEffect(() => {
   //   if (responseData && responseData.routes) {
-  //     const optimized = optimize(responseData.routes)
-  //     setData(optimized)
-  //     console.log('is it disabled?', isSendRoutesBtnDisabled(optimized))
-  //     setIsDisabled(isSendRoutesBtnDisabled(optimized))
+  //     setData(responseData.routes)
+  //     console.log('is it disabled?', isSendRoutesBtnDisabled(responseData.routes))
+  //     setIsDisabled(isSendRoutesBtnDisabled(responseData.routes))
   //   }
   // }, [responseData])
 
-  const optimized = optimize(sample.routes)
-  const [data, setData] = useState(optimized)
-  const [isDisabled, setIsDisabled] = useState(isSendRoutesBtnDisabled(optimized))
+  const [data, setData] = useState(sample.routes)
+  const [isDisabled, setIsDisabled] = useState(isSendRoutesBtnDisabled(sample.routes))
 
   const update = (routeKey, valueKey, value) => {
     const route = data[routeKey]
@@ -58,6 +47,23 @@ const RoutingList = ({ responseData, reset }) => {
     }
     setData(newData)
     setIsDisabled(isSendRoutesBtnDisabled(newData))
+  }
+
+  const sendRoutes = () => {
+    fetch('https://api-gsb.ngrok.io/api/sendRoutes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        data
+      })
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log('send routes response', response)
+        setShowModal(true)
+      })
   }
 
   return (
@@ -95,15 +101,6 @@ const RoutingList = ({ responseData, reset }) => {
           data && Object.keys(data).map((routeKey, index) => {
             const route = data[routeKey]
             const show = data[routeKey].show
-
-            // return (
-            //   <RouteRow
-            //     route={route}
-            //     update={() => {
-
-            //     }}
-            //   />
-            // )
 
             return (
               <div key={`${index}_${routeKey}`} className="pt-4 border-b-1 bg-white">
@@ -179,7 +176,7 @@ const RoutingList = ({ responseData, reset }) => {
                       <iframe
                         width="100%"
                         height="450"
-                        frameborder="0"
+                        frameBorder="0"
                         src={route.embedMapUrl}
                         allowFullScreen
                       />
@@ -194,20 +191,7 @@ const RoutingList = ({ responseData, reset }) => {
 
       <button
         onClick={() => {
-          fetch('https://api-gsb.ngrok.io/api/sendRoutes', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              data
-            })
-          })
-            .then(response => response.json())
-            .then(response => {
-              console.log('send routes response', response)
-              setShowModal(true)
-            })
+          sendRoutes()
         }}
         disabled={isDisabled}
         className={`${isDisabled ? 'bg-disabled-gray' : 'hover:bg-hover-teal bg-teal'} rounded-full shadow px-10 py-3 text-white mt-8 text-xl font-bold`}
