@@ -8,7 +8,7 @@ Hello! A few notes on the project:
 # Flow
 
 1. Get agency name, number of drivers available and a spreadsheet of addresses
-2. Parse addresses, get the latitude and logitude of every address
+2. Parse addresses, get the latitude and longitude of every address
 3. Initially, we wrote a shortest path algorithm (Dijkstra's algorithm). However, to obtain optimal routing (best, shortest), we are using a 3rd party API (speedyroute)
 4. Create Google Maps embedded maps to display to user + create maps directions links
 5. Display the routes to the user with options
