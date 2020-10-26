@@ -1,6 +1,10 @@
 const fetch = require('node-fetch')
 const moment = require('moment')
 
+// const SHORT_SAMPLE = require('./sampleData/short')
+// const VERY_SHORT_SAMPLE = require('./sampleData/veryShort')
+const LARGE_70 = require('./sampleData/large_70')
+
 const MapRoutes = {}
 
 const sampleOrigin = {
@@ -8,6 +12,29 @@ const sampleOrigin = {
   lon: -80.1067828,
   name: "850 Broken Sound Parkway Northwest, Boca Raton, FL, USA",
 }
+
+const sampleLocationList = [
+  {
+    lat: 26.3976533,
+    lon: -80.10714639999999,
+    name: "854 Broken Sound Parkway Northwest, Boca Raton, FL, USA",
+  },
+  {
+    lat: 26.4049305,
+    lon: -80.1680086,
+    name: "6318 Somerset Cir, Boca Raton, FL 33496, USA"
+  },
+  {
+    lat: 26.457825,
+    lon: -80.09448,
+    name: "250 Congress Park Dr, Delray Beach, FL 33445, USA"
+  },
+  {
+    lat: 26.3541154,
+    lon: -80.08530859999999,
+    name: "Mizner Park, 327 Plaza Real, Boca Raton, FL 33432, USA"
+  }
+]
 
 const getRequestData = (originObj, locationList, drivers) => {
   return {
@@ -80,10 +107,12 @@ MapRoutes.mapRoutesWithDrivers = (originObj, locationList, mapResponse) => {
   return driverRouteLinks
 }
 
+// 3rd party service which has no authentication validation
 MapRoutes.getShortestRoutes = async (originObj = sampleOrigin, locationList, drivers) => {
   try {
     const body = getRequestData(originObj, locationList, drivers)
 
+    // USE REAL DATA:
     const response = await fetch("http://www.speedyroute.com/optimize", {
       "headers": {
         "accept": "application/json, text/javascript, */*; q=0.01",
@@ -103,8 +132,16 @@ MapRoutes.getShortestRoutes = async (originObj = sampleOrigin, locationList, dri
     });
     const resp = await response.json()
     return MapRoutes.mapRoutesWithDrivers(originObj, locationList, resp);
+
+    // USE SAMPLE DATA:
+    // console.log('I AM USING A SAMPLE RESPONSE')
+    // return MapRoutes.mapRoutesWithDrivers(originObj, locationList, SHORT_SAMPLE.responseData);
+    // return MapRoutes.mapRoutesWithDrivers(originObj, locationList, VERY_SHORT_SAMPLE.responseData);
+    // return MapRoutes.mapRoutesWithDrivers(originObj, locationList, LARGE_70.responseData);  // hard-coded for 5 users
   } catch (err) {
-    return false
+    console.error('MapRoutes.getShortestRoutes API error', err)
+    console.error('MapRoutes.getShortestRoutes use sample data instead!')
+    return MapRoutes.mapRoutesWithDrivers(originObj, locationList, LARGE_70.responseData);
   }
 }
 

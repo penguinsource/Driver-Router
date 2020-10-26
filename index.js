@@ -1,10 +1,11 @@
 const dotenv = require('dotenv');
-dotenv.config({ path: `./config/dev.env` });
+const envConfigPath = process.env.ENV_VAR_FILE ? process.env.ENV_VAR_FILE : './config/dev.env'
+dotenv.config({ path: envConfigPath });
 const express = require('express')
 const bodyParser = require('body-parser')
 const AppManager = require('./resources/AppManager')
 
-const port = 3005
+const port = process.env.ENV === 'dev' ? 3005 : 8080
 const app = express()
 
 // Express app configuration:

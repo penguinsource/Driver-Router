@@ -28,7 +28,7 @@ function App() {
       requestData.append('drivers', data.drivers)
       requestData.append('agencyAddress', data.agencyAddress)
 
-      fetch('https://api-gsb.ngrok.io/api/csv', {
+      fetch(`/api/csv`, {
         method: 'POST',
         body: requestData
       })

@@ -43,7 +43,7 @@ const RoutingList = ({ responseData, reset }) => {
 
   const sendRoutes = () => {
     setLoading(true)
-    fetch('https://api-gsb.ngrok.io/api/sendRoutes', {
+    fetch(`/api/sendRoutes`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
