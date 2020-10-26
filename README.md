@@ -1,6 +1,6 @@
-# Hackathon 2020
+# South Florida Tech Hackathon 2020
 
-Hello! A few notes on the project:
+Hello there! A few notes on the project:
 
 - This is a React micro-app with a Node back-end service
 - Step-by-step web-app allowing you to easily distribute map routing amongst multiple drivers
@@ -31,6 +31,10 @@ Hello! A few notes on the project:
 **Ngrok** - locally 'remote' deployments
 
 **App Engine** - easy deployment testing (**we deprecated using it**, it was just easier to run off ngrok and same purpose for this project)
+
+# Links
+
+Hackathon event information - https://palmbeachtech.org/meetups/hackathon/
 
 # Important
 
