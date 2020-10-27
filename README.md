@@ -5,7 +5,7 @@ Hello there! A few notes on the project:
 - This is a React micro-app with a Node back-end service
 - Step-by-step web-app allowing you to easily distribute map routing amongst multiple drivers
 - View screenshots and flow of how this app works at https://github.com/penguinsource/hackathon_2020/issues/1
-- App can be used at https://router.ngrok.io/
+- App can be used at https://router-293714.uc.r.appspot.com/
 
 # Flow
 
