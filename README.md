@@ -36,6 +36,8 @@ Hello there! A few notes on the project:
 
 Hackathon event information - https://palmbeachtech.org/meetups/hackathon/
 
+Palm Beach Tech article - **GetSpeedBack creates winning solution** - https://palmbeachtech.org/code-for-good-hackathon/
+
 # Important
 
 - We have an auto-complete admin function used in the demo in order to efficiently display our web-apps functionality
